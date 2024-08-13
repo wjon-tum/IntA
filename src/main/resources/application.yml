@@ -1,0 +1,14 @@
+server:
+  port: 8086
+  forward-headers-strategy: NATIVE
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: application/javascript
+
+spring:
+  application:
+    name: 'intA'
+  main:
+    banner-mode: off
