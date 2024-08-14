@@ -13,7 +13,7 @@ public class Ranking {
         rankings = new HashMap<>();
     }
 
-    public void setItem(AgendaItem item, double rank, double weight) {
+    public void setItem(AgendaItem item, int rank, double weight) {
         rankings.put(item, new RankingEntry(rank, weight));
     }
 
