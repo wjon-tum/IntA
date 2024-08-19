@@ -7,21 +7,22 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+record AvgRankingEntry(AgendaItem item, double rank, double weight) implements Comparable<AvgRankingEntry> {
+    @Override
+    public int compareTo(AvgRankingEntry r) {
+        if (rank == r.rank) {
+            if (weight == r.weight) {
+                return 0;
+            }
+            return weight < r.weight ? -1 : 1;
+        }
+        return rank < r.rank ? -1 : 1;
+    }
+}
+
+
 public class RankingStrategyScore implements RankingStrategy {
     private static final double WEIGHT_FACTOR = 0.5;
-
-    record AvgRankingEntry(AgendaItem item, double rank, double weight) implements Comparable<AvgRankingEntry> {
-        @Override
-        public int compareTo(AvgRankingEntry r) {
-            if (rank == r.rank) {
-                if (weight == r.weight) {
-                    return 0;
-                }
-                return weight < r.weight ? -1 : 1;
-            }
-            return rank < r.rank ? -1 : 1;
-        }
-    }
 
     @Override
     public Ranking rank(List<Ranking> preferences) {
@@ -43,12 +44,12 @@ public class RankingStrategyScore implements RankingStrategy {
     private static Ranking resultOrdered(List<AvgRankingEntry> ranking) {
         List<AvgRankingEntry> rankingsSorted = ranking.stream().sorted(
                 Comparator.comparingDouble(
-                        r -> calculateItemScore(r.rank(), r.weight))).toList();
+                        r -> calculateItemScore(r.rank(), r.weight()))).toList();
 
         Ranking result = new Ranking();
         for (AvgRankingEntry entry : rankingsSorted) {
-            result.setItem(entry.item, rankingsSorted.indexOf(entry.item),
-                    calculateItemScore(entry.rank, entry.weight));
+            result.setItem(entry.item(), rankingsSorted.indexOf(entry),
+                    calculateItemScore(entry.rank(), entry.weight()));
         }
 
         return result;

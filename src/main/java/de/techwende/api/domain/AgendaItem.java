@@ -5,6 +5,6 @@ import org.springframework.lang.Nullable;
 public record AgendaItem(String name,
                          String description,
                          double estimatedDuration,
-                         @Nullable AgendaItemsConstraints constraints) {
+                         @Nullable AgendaItemConstraints constraints) {
 
 }

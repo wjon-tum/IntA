@@ -1,6 +1,7 @@
 package de.techwende.api.domain;
 
 import com.google.common.collect.Sets;
+import de.techwende.exception.RankingFailedException;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -11,10 +12,10 @@ import java.util.Map.Entry;
 public class RankingStrategyHemmingDistance implements RankingStrategy {
 
     @Override
-    public Ranking rank(List<Ranking> preferences) {
+    public Ranking rank(List<Ranking> preferences) throws RankingFailedException {
         Map<Ranking, Double> rankings = new HashMap<>();
 
-        // if performance improvement is required, here would be a good place
+        // if performance improvement is required, here would be a good place to start
         for (Ranking ranking1 : preferences) {
             for (Ranking ranking2 : preferences) {
                 if (ranking1 == ranking2) {
@@ -28,7 +29,12 @@ public class RankingStrategyHemmingDistance implements RankingStrategy {
             }
         }
 
-        return rankings.entrySet().stream().min(Comparator.comparingDouble(Entry::getValue)).get().getKey();
+        var result = rankings.entrySet().stream().min(Comparator.comparingDouble(Entry::getValue));
+        if (result.isEmpty()) {
+            throw new RankingFailedException("Couldn't create ranking");
+        }
+
+        return result.get().getKey();
     }
 
     private double calculateDistance(Ranking ranking1, Ranking ranking2) {
