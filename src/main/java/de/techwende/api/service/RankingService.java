@@ -1,11 +1,11 @@
 package de.techwende.api.service;
 
-import de.techwende.api.domain.AgendaItem;
-import de.techwende.api.domain.Ranking;
-import de.techwende.api.domain.RankingEntry;
-import de.techwende.api.domain.RankingStrategy;
-import de.techwende.api.domain.RankingStrategyHemmingDistance;
-import de.techwende.api.domain.RankingStrategyScore;
+import de.techwende.api.domain.agenda.AgendaItem;
+import de.techwende.api.domain.ranking.Ranking;
+import de.techwende.api.domain.ranking.RankingEntry;
+import de.techwende.api.domain.ranking.RankingStrategy;
+import de.techwende.api.domain.ranking.RankingStrategyHemmingDistance;
+import de.techwende.api.domain.ranking.RankingStrategyScore;
 import de.techwende.exception.RankingFailedException;
 
 import java.util.Comparator;
