@@ -24,6 +24,7 @@ dependencyCheck {
 
 dependencies {
     implementation 'com.auth0:java-jwt:4.4.0'
+    implementation("com.google.guava:guava:33.2.1-jre")
 
     implementation 'org.apache.logging.log4j:log4j-api'
     implementation 'org.apache.logging.log4j:log4j-jul'
