@@ -1,4 +1,6 @@
-package de.techwende.api.domain;
+package de.techwende.api.domain.ranking;
+
+import de.techwende.api.domain.agenda.AgendaItem;
 
 import java.util.ArrayList;
 import java.util.Comparator;

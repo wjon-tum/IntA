@@ -12,3 +12,11 @@ spring:
     name: 'intA'
   main:
     banner-mode: off
+
+inta:
+  jwt:
+    auth:
+      secret: ${INTA_SERVER_SECRET}
+      token:
+        lifetime:
+          hours: 12

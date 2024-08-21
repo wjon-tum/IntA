@@ -1,4 +1,4 @@
-package de.techwende.api.domain;
+package de.techwende.api.domain.ranking;
 
 public record RankingEntry(int rank, double weight) implements Comparable<RankingEntry> {
 

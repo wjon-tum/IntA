@@ -1,4 +1,4 @@
-package de.techwende.api.domain;
+package de.techwende.api.domain.agenda;
 
 import org.springframework.lang.Nullable;
 
