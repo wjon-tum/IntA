@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Log4j2
 @Service
-public class JWTTokenService {
+public class JWTService {
     private static final String JWT_SUBJECT = "inta";
     private static final String JWT_ISSUER = JWT_SUBJECT + ".techwende.de";
 
@@ -29,7 +29,7 @@ public class JWTTokenService {
     private final Long tokenLifetimeHours;
 
     @Autowired
-    JWTTokenService(@Value("${inta.jwt.auth.secret}") String tokenServerSecret,
+    JWTService(@Value("${inta.jwt.auth.secret}") String tokenServerSecret,
             @Value("${inta.jwt.auth.token.lifetime.hours}") Long hours) {
         algorithm = Algorithm.HMAC256(tokenServerSecret);
         jwtVerifier = JWT.require(algorithm)
@@ -71,7 +71,7 @@ public class JWTTokenService {
                 .withSubject(JWT_SUBJECT)
                 .withIssuer(JWT_ISSUER)
                 .withClaim("guest_user_id", guestUserID.getGuestUserID())
-                .withClaim("guest_user_session", guestUserID.getSessionID())
+                .withClaim("guest_user_session", guestUserID.getSessionID().getSessionId())
                 .withIssuedAt(Instant.now())
                 .withExpiresAt(Instant.now().plus(tokenLifetimeHours, ChronoUnit.HOURS))
                 .sign(algorithm);

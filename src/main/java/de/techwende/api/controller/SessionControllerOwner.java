@@ -1,7 +1,7 @@
 package de.techwende.api.controller;
 
 import de.techwende.api.domain.session.RankingSession;
-import de.techwende.api.service.SessionService;
+import de.techwende.api.service.session.SessionServiceOwner;
 import de.techwende.exception.SessionErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,23 +12,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class SessionControllerOwner {
-    private final SessionService sessionService;
+    private final SessionServiceOwner sessionServiceOwner;
 
     @Autowired
-    public SessionControllerOwner(SessionService sessionService) {
-        this.sessionService = sessionService;
+    public SessionControllerOwner(SessionServiceOwner sessionServiceOwner) {
+        this.sessionServiceOwner = sessionServiceOwner;
     }
 
     @GetMapping("/new")
     public ResponseEntity<RankingSession> createSession() throws SessionErrorException {
-        return ResponseEntity.ok(sessionService.createSession());
+        return ResponseEntity.ok(sessionServiceOwner.createSession());
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<Boolean> deleteSession(
+    public ResponseEntity<String> deleteSession(
             @PathVariable("id") String sessionID,
             @PathVariable("key") String sessionKey) throws SessionErrorException {
 
-        return ResponseEntity.ok(sessionService.deleteSession(sessionID, sessionKey));
+        if (sessionServiceOwner.deleteSession(sessionID, sessionKey)) {
+            return ResponseEntity.ok(sessionID);
+        } else {
+            return ResponseEntity.internalServerError().body("Could not delete session with id " + sessionID);
+        }
     }
 }
