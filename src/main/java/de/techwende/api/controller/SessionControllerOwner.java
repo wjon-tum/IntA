@@ -1,14 +1,17 @@
 package de.techwende.api.controller;
 
+import de.techwende.api.domain.agenda.AgendaItem;
 import de.techwende.api.domain.session.RankingSession;
 import de.techwende.api.service.session.SessionServiceOwner;
+import de.techwende.exception.RankingFailedException;
 import de.techwende.exception.SessionErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 public class SessionControllerOwner {
@@ -20,19 +23,69 @@ public class SessionControllerOwner {
     }
 
     @GetMapping("/new")
-    public ResponseEntity<RankingSession> createSession() throws SessionErrorException {
-        return ResponseEntity.ok(sessionServiceOwner.createSession());
+    public ResponseEntity<String> createSession() {
+        try {
+            RankingSession newSession = sessionServiceOwner.createSession();
+            return ResponseEntity.ok("{id:" + newSession.getSessionID() + ",key:" + newSession.getSessionKey() + "}");
+        } catch (SessionErrorException e) {
+            return ResponseEntity.internalServerError().body("Could not create session: " + e.getMessage());
+        }
     }
 
-    @PostMapping("/delete")
+    @GetMapping("/delete")
     public ResponseEntity<String> deleteSession(
             @PathVariable("id") String sessionID,
-            @PathVariable("key") String sessionKey) throws SessionErrorException {
+            @PathVariable("key") String sessionKey) {
 
-        if (sessionServiceOwner.deleteSession(sessionID, sessionKey)) {
+        try {
+            sessionServiceOwner.deleteSession(sessionID, sessionKey);
             return ResponseEntity.ok(sessionID);
-        } else {
-            return ResponseEntity.internalServerError().body("Could not delete session with id " + sessionID);
+        } catch (SessionErrorException e) {
+            return ResponseEntity.internalServerError()
+                    .body("Could not delete session with id " + sessionID + ": " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/open")
+    public ResponseEntity<String> openSession(
+            @PathVariable("id") String sessionID,
+            @PathVariable("key") String sessionKey) {
+
+        try {
+            sessionServiceOwner.openSession(sessionID, sessionKey);
+            return ResponseEntity.ok(sessionID);
+        } catch (SessionErrorException e) {
+            return ResponseEntity.internalServerError()
+                    .body("Could not open session with id " + sessionID + ": " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/lock")
+    public ResponseEntity<String> lockSession(
+            @PathVariable("id") String sessionID,
+            @PathVariable("key") String sessionKey) {
+
+        try {
+            sessionServiceOwner.lockSession(sessionID, sessionKey);
+            return ResponseEntity.ok(sessionID);
+        } catch (SessionErrorException e) {
+            return ResponseEntity.internalServerError()
+                    .body("Could not lock session with id " + sessionID + ": " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/eval")
+    public ResponseEntity<List<AgendaItem>> evaluateSession(
+            @PathVariable("id") String sessionID,
+            @PathVariable("key") String sessionKey,
+            @PathVariable("resExist") boolean resultOfExisting) {
+
+        try {
+            List<AgendaItem> rankingResults =
+                    sessionServiceOwner.evaluateRankings(sessionID, sessionKey, resultOfExisting);
+            return ResponseEntity.ok(rankingResults);
+        } catch (SessionErrorException | RankingFailedException e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

@@ -3,17 +3,29 @@ package de.techwende.api.service.session;
 import static de.techwende.api.util.ConstantsUtil.ALPHABET;
 import static de.techwende.api.util.ConstantsUtil.SESSION_ID_LENGTH;
 
+import de.techwende.api.domain.agenda.AgendaItem;
+import de.techwende.api.domain.ranking.Ranking;
 import de.techwende.api.domain.session.RankingSession;
 import de.techwende.api.domain.session.SessionID;
 import de.techwende.api.domain.session.SessionKey;
+import de.techwende.api.service.RankingService;
+import de.techwende.exception.RankingFailedException;
 import de.techwende.exception.SessionErrorException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SessionServiceOwner extends SessionService {
+    private final RankingService rankingService;
     private final long maxSessions;
 
-    public SessionServiceOwner() {
+    @Autowired
+    public SessionServiceOwner(RankingService rankingService) {
+        this.rankingService = rankingService;
         maxSessions = (long) Math.pow(ALPHABET.length, SESSION_ID_LENGTH) - 2;
     }
 
@@ -28,31 +40,46 @@ public class SessionServiceOwner extends SessionService {
         return newSession;
     }
 
-    public boolean deleteSession(String sessionID, String sessionKey) throws SessionErrorException {
-        RankingSession session = ACTIVE_SESSIONS.get(sessionID);
-        if (session == null || !sessionKey.equals(session.getSessionKey().getSessionKey())) {
-            throw new SessionErrorException("Key " + sessionKey + " is not valid for session " + sessionID);
+    public void deleteSession(String sessionID, String sessionKey) throws SessionErrorException {
+        validateSession(sessionID, sessionKey);
+        if (ACTIVE_SESSIONS.remove(sessionID) == null) {
+            throw new SessionErrorException(
+                    "Couldn't delete session with session ID " + sessionID + ", as it does not exist");
         }
-
-        return ACTIVE_SESSIONS.remove(sessionID) != null;
     }
 
     public void openSession(String sessionID, String sessionKey) throws SessionErrorException {
-        RankingSession session = ACTIVE_SESSIONS.get(sessionID);
-        if (session == null || !sessionKey.equals(session.getSessionKey().getSessionKey())) {
-            throw new SessionErrorException("Key " + sessionKey + " is not valid for session " + sessionID);
-        }
-
-        ACTIVE_SESSIONS.get(sessionID).setOpen(true);
+        RankingSession session = validateSession(sessionID, sessionKey);
+        session.setOpen(true);
     }
 
     public void lockSession(String sessionID, String sessionKey) throws SessionErrorException {
+        RankingSession session = validateSession(sessionID, sessionKey);
+        session.setOpen(false);
+    }
+
+    public List<AgendaItem> evaluateRankings(String sessionID, String sessionKey, boolean resultOfExisting)
+            throws SessionErrorException, RankingFailedException {
+        Set<Ranking> guestUserRankings = collectGuestUserRankings(sessionID, sessionKey);
+        return rankingService.computeRankingResultList(List.copyOf(guestUserRankings), resultOfExisting);
+    }
+
+    public Set<Ranking> collectGuestUserRankings(String sessionID, String sessionKey) throws SessionErrorException {
+        validateSession(sessionID, sessionKey);
+
+        return GUEST_USER_RANKING.get(sessionID).stream()
+                .map(GuestUserInformation::ranking)
+                .collect(Collectors.toSet());
+    }
+
+
+    private RankingSession validateSession(String sessionID, String sessionKey) throws SessionErrorException {
         RankingSession session = ACTIVE_SESSIONS.get(sessionID);
         if (session == null || !sessionKey.equals(session.getSessionKey().getSessionKey())) {
             throw new SessionErrorException("Key " + sessionKey + " is not valid for session " + sessionID);
         }
 
-        ACTIVE_SESSIONS.get(sessionID).setOpen(false);
+        return session;
     }
 
     private SessionID generateSessionID() throws SessionErrorException {
