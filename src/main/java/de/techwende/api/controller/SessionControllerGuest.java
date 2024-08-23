@@ -1,15 +1,20 @@
 package de.techwende.api.controller;
 
+import de.techwende.api.domain.ranking.Ranking;
+import de.techwende.api.domain.session.GuestUserID;
 import de.techwende.api.service.session.SessionServiceGuest;
+import de.techwende.exception.SessionErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URI;
-import java.util.Optional;
 
 @Controller
 public class SessionControllerGuest {
@@ -29,11 +34,23 @@ public class SessionControllerGuest {
     }
 
     @GetMapping("/join")
-    public ResponseEntity<String> joinSession(@PathVariable("id") String sessionID) {
-        Optional<String> guestUserJWT = sessionServiceGuest.joinSession(sessionID);
-        return guestUserJWT.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.internalServerError()
-                        .body("Session " + sessionID + " doesn't exists"));
+    public ResponseEntity<String> joinSession(@RequestParam("id") String sessionID) {
+        try {
+            String guestUserId = sessionServiceGuest.joinSession(sessionID);
+            return ResponseEntity.ok(guestUserId);
+        } catch (SessionErrorException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
 
+    }
+
+    @PostMapping("/vote")
+    public ResponseEntity<Void> vote(@RequestParam("id") GuestUserID guestUserId, @RequestBody Ranking ranking) {
+        try {
+            sessionServiceGuest.addGuestUserVote(guestUserId, ranking);
+            return ResponseEntity.ok().build();
+        } catch (SessionErrorException e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

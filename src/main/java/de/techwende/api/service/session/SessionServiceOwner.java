@@ -72,16 +72,6 @@ public class SessionServiceOwner extends SessionService {
                 .collect(Collectors.toSet());
     }
 
-
-    private RankingSession validateSession(String sessionID, String sessionKey) throws SessionErrorException {
-        RankingSession session = ACTIVE_SESSIONS.get(sessionID);
-        if (session == null || !sessionKey.equals(session.getSessionKey().getSessionKey())) {
-            throw new SessionErrorException("Key " + sessionKey + " is not valid for session " + sessionID);
-        }
-
-        return session;
-    }
-
     private SessionID generateSessionID() throws SessionErrorException {
         SessionID sessionID = new SessionID();
         for (int i = 0; i < 1000; i++) {

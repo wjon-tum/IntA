@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -34,8 +34,8 @@ public class SessionControllerOwner {
 
     @GetMapping("/delete")
     public ResponseEntity<String> deleteSession(
-            @PathVariable("id") String sessionID,
-            @PathVariable("key") String sessionKey) {
+            @RequestParam("id") String sessionID,
+            @RequestParam("key") String sessionKey) {
 
         try {
             sessionServiceOwner.deleteSession(sessionID, sessionKey);
@@ -48,8 +48,8 @@ public class SessionControllerOwner {
 
     @GetMapping("/open")
     public ResponseEntity<String> openSession(
-            @PathVariable("id") String sessionID,
-            @PathVariable("key") String sessionKey) {
+            @RequestParam("id") String sessionID,
+            @RequestParam("key") String sessionKey) {
 
         try {
             sessionServiceOwner.openSession(sessionID, sessionKey);
@@ -62,8 +62,8 @@ public class SessionControllerOwner {
 
     @GetMapping("/lock")
     public ResponseEntity<String> lockSession(
-            @PathVariable("id") String sessionID,
-            @PathVariable("key") String sessionKey) {
+            @RequestParam("id") String sessionID,
+            @RequestParam("key") String sessionKey) {
 
         try {
             sessionServiceOwner.lockSession(sessionID, sessionKey);
@@ -76,9 +76,9 @@ public class SessionControllerOwner {
 
     @GetMapping("/eval")
     public ResponseEntity<List<AgendaItem>> evaluateSession(
-            @PathVariable("id") String sessionID,
-            @PathVariable("key") String sessionKey,
-            @PathVariable("resExist") boolean resultOfExisting) {
+            @RequestParam("id") String sessionID,
+            @RequestParam("key") String sessionKey,
+            @RequestParam(name = "resExist", required = false, defaultValue = "false") boolean resultOfExisting) {
 
         try {
             List<AgendaItem> rankingResults =

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 
 @Service
@@ -24,31 +23,22 @@ public class SessionServiceGuest extends SessionService {
         this.jwtService = jwtService;
     }
 
-    public Optional<String> joinSession(String sessionID) {
-        RankingSession session = ACTIVE_SESSIONS.get(sessionID);
-        if (session == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(jwtService.generateTokenForGuestUser(new GuestUserID(session.getSessionID())));
+    public String joinSession(String sessionID) throws SessionErrorException {
+        RankingSession session = validateSession(sessionID);
+        GuestUserID guestUserID = new GuestUserID(session.getSessionID());
+        return jwtService.generateTokenForGuestUser(guestUserID);
     }
 
-    public boolean addGuestUserVote(GuestUserID guestUserID, Ranking ranking) throws SessionErrorException {
+    public void addGuestUserVote(GuestUserID guestUserID, Ranking ranking) throws SessionErrorException {
         SessionID sessionID = guestUserID.getSessionID();
-        RankingSession session = ACTIVE_SESSIONS.get(sessionID.getSessionId());
-
-        if (session == null) {
-            throw new SessionErrorException("Session with id " + sessionID + " does not exist");
-        }
+        RankingSession session = validateSession(sessionID.getSessionId());
 
         if (!session.isOpen()) {
-            return false;
+            throw new SessionErrorException(
+                    "Session with id " + guestUserID.getSessionID().getSessionId() + " is closed");
         }
 
         GUEST_USER_RANKING.computeIfAbsent(sessionID.getSessionId(), s -> new ArrayList<>());
         GUEST_USER_RANKING.get(sessionID.getSessionId()).add(new GuestUserInformation(guestUserID, sessionID, ranking));
-        return true;
     }
-
-
 }
