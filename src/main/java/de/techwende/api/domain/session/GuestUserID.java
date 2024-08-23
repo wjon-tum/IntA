@@ -11,14 +11,14 @@ import java.util.Random;
 @Getter
 public class GuestUserID {
     private final String guestUserID;
-    private final String sessionID;
+    private final SessionID sessionID;
 
-    public GuestUserID(String sessionID) {
+    public GuestUserID(SessionID sessionID) {
         this.sessionID = sessionID;
         Random random = new Random();
         char[] newGuestUserId = new char[USER_ID_LENGTH];
         for (int i = 0; i < SESSION_ID_LENGTH; i++) {
-            newGuestUserId[i] = sessionID.charAt(i);
+            newGuestUserId[i] = sessionID.getSessionId().charAt(i);
         }
 
         newGuestUserId[SESSION_ID_LENGTH] = '-';
