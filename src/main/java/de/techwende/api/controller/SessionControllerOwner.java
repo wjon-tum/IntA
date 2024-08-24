@@ -7,13 +7,13 @@ import de.techwende.exception.RankingFailedException;
 import de.techwende.exception.SessionErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class SessionControllerOwner {
     private final SessionServiceOwner sessionServiceOwner;
 
@@ -26,7 +26,9 @@ public class SessionControllerOwner {
     public ResponseEntity<String> createSession() {
         try {
             RankingSession newSession = sessionServiceOwner.createSession();
-            return ResponseEntity.ok("{id:" + newSession.getSessionID() + ",key:" + newSession.getSessionKey() + "}");
+            return ResponseEntity.ok(
+                    "{id:" + newSession.getSessionID().getSessionId() + ",key:" + newSession.getSessionKey()
+                            .getSessionKey() + "}");
         } catch (SessionErrorException e) {
             return ResponseEntity.internalServerError().body("Could not create session: " + e.getMessage());
         }
