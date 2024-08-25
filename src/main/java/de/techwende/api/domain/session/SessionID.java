@@ -1,11 +1,11 @@
 package de.techwende.api.domain.session;
 
-import static de.techwende.api.util.Constants.ALPHABET;
-import static de.techwende.api.util.Constants.SESSION_ID_LENGTH;
-
 import lombok.Getter;
 
 import java.util.Random;
+
+import static de.techwende.api.util.Constants.ALPHABET;
+import static de.techwende.api.util.Constants.SESSION_ID_LENGTH;
 
 @Getter
 public class SessionID {

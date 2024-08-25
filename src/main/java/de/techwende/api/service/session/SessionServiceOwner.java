@@ -1,8 +1,5 @@
 package de.techwende.api.service.session;
 
-import static de.techwende.api.util.Constants.ALPHABET;
-import static de.techwende.api.util.Constants.SESSION_ID_LENGTH;
-
 import de.techwende.api.domain.agenda.AgendaItem;
 import de.techwende.api.domain.ranking.Ranking;
 import de.techwende.api.domain.session.RankingSession;
@@ -18,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static de.techwende.api.util.Constants.ALPHABET;
+import static de.techwende.api.util.Constants.SESSION_ID_LENGTH;
 
 @Service
 public class SessionServiceOwner extends SessionService {

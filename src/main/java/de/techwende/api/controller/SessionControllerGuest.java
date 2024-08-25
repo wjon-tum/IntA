@@ -1,7 +1,5 @@
 package de.techwende.api.controller;
 
-import static de.techwende.api.util.WebUtils.sanitizeString;
-
 import de.techwende.api.domain.ranking.Ranking;
 import de.techwende.api.domain.session.GuestUserID;
 import de.techwende.api.service.session.SessionServiceGuest;
@@ -18,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+
+import static de.techwende.api.util.WebUtils.sanitizeString;
 
 @RestController
 public class SessionControllerGuest {
