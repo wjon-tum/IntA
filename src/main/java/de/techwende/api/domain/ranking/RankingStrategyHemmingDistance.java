@@ -1,8 +1,9 @@
 package de.techwende.api.domain.ranking;
 
-import com.google.common.collect.Sets;
 import de.techwende.api.domain.agenda.AgendaItem;
 import de.techwende.exception.RankingFailedException;
+
+import com.google.common.collect.Sets;
 
 import java.util.Comparator;
 import java.util.HashMap;

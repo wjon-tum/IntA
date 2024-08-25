@@ -5,6 +5,7 @@ import de.techwende.api.domain.session.RankingSession;
 import de.techwende.api.service.session.SessionServiceOwner;
 import de.techwende.exception.RankingFailedException;
 import de.techwende.exception.SessionErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static de.techwende.api.util.WebUtils.internalServerError;
 
 @RestController
 public class SessionControllerOwner {
@@ -30,7 +33,7 @@ public class SessionControllerOwner {
                     "{id:" + newSession.getSessionID().getSessionId() + ",key:" + newSession.getSessionKey()
                             .getSessionKey() + "}");
         } catch (SessionErrorException e) {
-            return ResponseEntity.internalServerError().body("Could not create session: " + e.getMessage());
+            return internalServerError("Could not create session: " + e.getMessage());
         }
     }
 
@@ -43,8 +46,7 @@ public class SessionControllerOwner {
             sessionServiceOwner.deleteSession(sessionID, sessionKey);
             return ResponseEntity.ok(sessionID);
         } catch (SessionErrorException e) {
-            return ResponseEntity.internalServerError()
-                    .body("Could not delete session with id " + sessionID + ": " + e.getMessage());
+            return internalServerError("Could not delete session with id " + sessionID + ": " + e.getMessage());
         }
     }
 
@@ -57,8 +59,7 @@ public class SessionControllerOwner {
             sessionServiceOwner.openSession(sessionID, sessionKey);
             return ResponseEntity.ok(sessionID);
         } catch (SessionErrorException e) {
-            return ResponseEntity.internalServerError()
-                    .body("Could not open session with id " + sessionID + ": " + e.getMessage());
+            return internalServerError("Could not open session with id " + sessionID + ": " + e.getMessage());
         }
     }
 
@@ -71,8 +72,7 @@ public class SessionControllerOwner {
             sessionServiceOwner.lockSession(sessionID, sessionKey);
             return ResponseEntity.ok(sessionID);
         } catch (SessionErrorException e) {
-            return ResponseEntity.internalServerError()
-                    .body("Could not lock session with id " + sessionID + ": " + e.getMessage());
+            return internalServerError("Could not lock session with id " + sessionID + ": " + e.getMessage());
         }
     }
 

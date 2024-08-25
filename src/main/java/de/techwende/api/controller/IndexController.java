@@ -14,18 +14,14 @@ class IndexController {
 
     /**
      * Redirects to the startpage view
-     *
-     * @return the html document
      */
     @GetMapping(path = "", produces = MediaType.TEXT_HTML_VALUE)
     public String index() {
-        return "redirect:start";
+        return "redirect:/start";
     }
 
     /**
      * Returns the startpage view
-     *
-     * @return the html document
      */
     @GetMapping(path = "start/**", produces = MediaType.TEXT_HTML_VALUE)
     public String startpage() {
@@ -34,8 +30,6 @@ class IndexController {
 
     /**
      * Returns the login view
-     *
-     * @return the html document
      */
     @GetMapping(path = "login/**", produces = MediaType.TEXT_HTML_VALUE)
     public String login() {
@@ -44,8 +38,6 @@ class IndexController {
 
     /**
      * Returns the dashboard view
-     *
-     * @return the html document
      */
     @GetMapping(path = "dashboard/**", produces = MediaType.TEXT_HTML_VALUE)
     public String dashboard() {

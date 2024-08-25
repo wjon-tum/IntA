@@ -7,6 +7,7 @@ import de.techwende.api.domain.ranking.RankingStrategy;
 import de.techwende.api.domain.ranking.RankingStrategyHemmingDistance;
 import de.techwende.api.domain.ranking.RankingStrategyScore;
 import de.techwende.exception.RankingFailedException;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;

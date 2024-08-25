@@ -4,6 +4,7 @@ import de.techwende.api.domain.ranking.Ranking;
 import de.techwende.api.domain.session.GuestUserID;
 import de.techwende.api.service.session.SessionServiceGuest;
 import de.techwende.exception.SessionErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+import static de.techwende.api.util.WebUtils.sanitizeString;
+
 @RestController
 public class SessionControllerGuest {
     private final SessionServiceGuest sessionServiceGuest;
@@ -27,6 +30,7 @@ public class SessionControllerGuest {
 
     @GetMapping("/s/{sessionID}")
     public ResponseEntity<Void> redirect(@PathVariable("sessionID") String sessionID) {
+        sessionID = sanitizeString(sessionID);
         String redirectUrl = "/join?id=" + sessionID;
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create(redirectUrl))
@@ -35,6 +39,7 @@ public class SessionControllerGuest {
 
     @GetMapping("/join")
     public ResponseEntity<String> joinSession(@RequestParam("id") String sessionID) {
+        sessionID = sanitizeString(sessionID);
         try {
             String guestUserId = sessionServiceGuest.joinSession(sessionID);
             return ResponseEntity.ok(guestUserId);

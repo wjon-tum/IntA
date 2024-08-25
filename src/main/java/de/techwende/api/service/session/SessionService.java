@@ -5,6 +5,7 @@ import de.techwende.api.domain.session.GuestUserID;
 import de.techwende.api.domain.session.RankingSession;
 import de.techwende.api.domain.session.SessionID;
 import de.techwende.exception.SessionErrorException;
+
 import org.springframework.lang.Nullable;
 
 import java.util.HashMap;
