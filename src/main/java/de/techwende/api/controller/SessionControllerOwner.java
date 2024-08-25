@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static de.techwende.api.util.WebUtils.internalServerError;
+import static de.techwende.api.util.WebUtils.responseInternalServerError;
+import static de.techwende.api.util.WebUtils.responseOk;
 
 @RestController
 public class SessionControllerOwner {
@@ -33,7 +34,7 @@ public class SessionControllerOwner {
                     "{id:" + newSession.getSessionID().getSessionId() + ",key:" + newSession.getSessionKey()
                             .getSessionKey() + "}");
         } catch (SessionErrorException e) {
-            return internalServerError("Could not create session: " + e.getMessage());
+            return responseInternalServerError("Could not create session: " + e.getMessage());
         }
     }
 
@@ -44,9 +45,9 @@ public class SessionControllerOwner {
 
         try {
             sessionServiceOwner.deleteSession(sessionID, sessionKey);
-            return ResponseEntity.ok(sessionID);
+            return responseOk(sessionID);
         } catch (SessionErrorException e) {
-            return internalServerError("Could not delete session with id " + sessionID + ": " + e.getMessage());
+            return responseInternalServerError("Could not delete session with id " + sessionID + ": " + e.getMessage());
         }
     }
 
@@ -57,9 +58,9 @@ public class SessionControllerOwner {
 
         try {
             sessionServiceOwner.openSession(sessionID, sessionKey);
-            return ResponseEntity.ok(sessionID);
+            return responseOk(sessionID);
         } catch (SessionErrorException e) {
-            return internalServerError("Could not open session with id " + sessionID + ": " + e.getMessage());
+            return responseInternalServerError("Could not open session with id " + sessionID + ": " + e.getMessage());
         }
     }
 
@@ -70,9 +71,9 @@ public class SessionControllerOwner {
 
         try {
             sessionServiceOwner.lockSession(sessionID, sessionKey);
-            return ResponseEntity.ok(sessionID);
+            return responseOk(sessionID);
         } catch (SessionErrorException e) {
-            return internalServerError("Could not lock session with id " + sessionID + ": " + e.getMessage());
+            return responseInternalServerError("Could not lock session with id " + sessionID + ": " + e.getMessage());
         }
     }
 

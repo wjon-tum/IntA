@@ -12,7 +12,11 @@ public final class WebUtils {
         return Encode.forHtml(str);
     }
 
-    public static ResponseEntity<String> internalServerError(String message) {
+    public static ResponseEntity<String> responseOk(String body) {
+        return ResponseEntity.ok().body(sanitizeString(body));
+    }
+
+    public static ResponseEntity<String> responseInternalServerError(String message) {
         return ResponseEntity.internalServerError().body(sanitizeString(message));
     }
 }
