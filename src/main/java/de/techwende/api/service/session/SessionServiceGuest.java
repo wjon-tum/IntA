@@ -6,6 +6,7 @@ import de.techwende.api.domain.session.GuestUserID;
 import de.techwende.api.domain.session.RankingSession;
 import de.techwende.api.domain.session.SessionID;
 import de.techwende.exception.SessionErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

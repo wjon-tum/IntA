@@ -1,7 +1,7 @@
 package de.techwende.api.service.session;
 
-import static de.techwende.api.util.ConstantsUtil.ALPHABET;
-import static de.techwende.api.util.ConstantsUtil.SESSION_ID_LENGTH;
+import static de.techwende.api.util.Constants.ALPHABET;
+import static de.techwende.api.util.Constants.SESSION_ID_LENGTH;
 
 import de.techwende.api.domain.agenda.AgendaItem;
 import de.techwende.api.domain.ranking.Ranking;
@@ -11,6 +11,7 @@ import de.techwende.api.domain.session.SessionKey;
 import de.techwende.api.service.RankingService;
 import de.techwende.exception.RankingFailedException;
 import de.techwende.exception.SessionErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
