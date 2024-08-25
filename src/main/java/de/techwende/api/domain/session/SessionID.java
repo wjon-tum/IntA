@@ -1,7 +1,7 @@
 package de.techwende.api.domain.session;
 
-import static de.techwende.api.util.ConstantsUtil.ALPHABET;
-import static de.techwende.api.util.ConstantsUtil.SESSION_ID_LENGTH;
+import static de.techwende.api.util.Constants.ALPHABET;
+import static de.techwende.api.util.Constants.SESSION_ID_LENGTH;
 
 import lombok.Getter;
 

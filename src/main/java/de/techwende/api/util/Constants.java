@@ -1,6 +1,6 @@
 package de.techwende.api.util;
 
-public final class ConstantsUtil {
+public final class Constants {
     public static final int USER_ID_LENGTH = 8;             // Has to be longer than SESSION_ID_LENGTH + 2
     public static final int SESSION_ID_LENGTH = 4;
     public static final int SESSION_KEY_LENGTH = 20;
@@ -11,6 +11,6 @@ public final class ConstantsUtil {
             'u', 'v', 'w', 'x', 'y', 'z'
     };
 
-    private ConstantsUtil() {
+    private Constants() {
     }
 }
