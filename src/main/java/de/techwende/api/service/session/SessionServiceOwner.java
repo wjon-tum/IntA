@@ -36,7 +36,7 @@ public class SessionServiceOwner extends SessionService {
         }
 
         SessionID sessionID = generateSessionID();
-        RankingSession newSession = new RankingSession(sessionID, new SessionKey(), true);
+        RankingSession newSession = new RankingSession(sessionID, new SessionKey(), false);
         ACTIVE_SESSIONS.put(sessionID.getSessionId(), newSession);
         return newSession;
     }
@@ -57,6 +57,18 @@ public class SessionServiceOwner extends SessionService {
     public void lockSession(String sessionID, String sessionKey) throws SessionErrorException {
         RankingSession session = validateSession(sessionID, sessionKey);
         session.setOpen(false);
+    }
+
+    public void addAgendaItemToSession(String sessionID, String sessionKey, AgendaItem agendaItem)
+            throws SessionErrorException {
+        RankingSession session = validateSession(sessionID, sessionKey);
+        session.addAgendaItem(agendaItem);
+    }
+
+    public boolean deleteAgendaItemFromSession(String sessionID, String sessionKey, AgendaItem agendaItem)
+            throws SessionErrorException {
+        RankingSession session = validateSession(sessionID, sessionKey);
+        return session.deleteAgendaItem(agendaItem);
     }
 
     public List<AgendaItem> evaluateRankings(String sessionID, String sessionKey, boolean resultOfExisting)
