@@ -1,5 +1,7 @@
 package de.techwende.api.controller;
 
+import static de.techwende.api.util.WebUtils.sanitizeString;
+
 import de.techwende.api.domain.ranking.Ranking;
 import de.techwende.api.domain.session.GuestUserID;
 import de.techwende.api.service.session.SessionServiceGuest;
