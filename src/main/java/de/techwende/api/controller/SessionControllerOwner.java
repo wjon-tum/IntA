@@ -1,7 +1,5 @@
 package de.techwende.api.controller;
 
-import static de.techwende.api.util.WebUtils.internalServerError;
-
 import de.techwende.api.domain.agenda.AgendaItem;
 import de.techwende.api.domain.session.RankingSession;
 import de.techwende.api.service.session.SessionServiceOwner;
