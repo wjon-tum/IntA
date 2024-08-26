@@ -2,13 +2,14 @@ plugins {
     id 'java'
     id 'idea'
     id 'checkstyle'
+    id 'org.springframework.boot' version '3.3.3'
     id 'org.owasp.dependencycheck' version '10.0.3'
-    id "org.springframework.boot" version "3.3.3"
-    id "io.spring.dependency-management" version "1.1.6"
+    id 'com.github.ben-manes.versions' version '0.51.0'
+    id 'io.spring.dependency-management' version '1.1.6'
 }
 
 checkstyle {
-    toolVersion = "10.18.0"
+    toolVersion = '10.18.0'
     configFile = rootProject.file('checkstyle/checkstyle.xml')
 }
 
@@ -26,8 +27,8 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'com.google.guava:guava:33.3.0-jre'
 
-    implementation 'org.apache.logging.log4j:log4j-api'
-    implementation 'org.apache.logging.log4j:log4j-jul'
+    implementation 'org.apache.logging.log4j:log4j-api:3.0.0-beta2'
+    implementation 'org.apache.logging.log4j:log4j-jul:3.0.0-beta2'
     implementation 'org.apache.logging.log4j:log4j-core'
 
     implementation 'org.owasp.encoder:encoder:1.3.1'
@@ -43,8 +44,8 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok"
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    testImplementation "com.squareup.okhttp3:okhttp"
-    testImplementation 'org.assertj:assertj-core'
+    testImplementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
+    testImplementation 'org.assertj:assertj-core:3.26.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 }
@@ -53,8 +54,8 @@ test {
     useJUnitPlatform()
 }
 
-project.group = "de.techwende"
-project.version = "0.0.1"
+project.group = 'de.techwende'
+project.version = '0.0.1'
 
 compileJava {
     sourceCompatibility = '22'
@@ -63,5 +64,5 @@ compileJava {
 
 bootRun {
     systemProperties System.properties
-    systemProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager")
+    systemProperty('java.util.logging.manager', 'org.apache.logging.log4j.jul.LogManager')
 }
