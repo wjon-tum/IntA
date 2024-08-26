@@ -1,6 +1,7 @@
 package de.techwende.api.service.session;
 
 import de.techwende.api.auth.JWTService;
+import de.techwende.api.domain.agenda.AgendaItem;
 import de.techwende.api.domain.ranking.Ranking;
 import de.techwende.api.domain.session.GuestUserID;
 import de.techwende.api.domain.session.RankingSession;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -30,6 +32,11 @@ public class SessionServiceGuest extends SessionService {
         return jwtService.generateTokenForGuestUser(guestUserID);
     }
 
+    public List<AgendaItem> fetchAgendaItemsForSession(String sessionID) throws SessionErrorException {
+        RankingSession session = validateSession(sessionID);
+        return session.getAgendaItems();
+    }
+
     public void addGuestUserVote(GuestUserID guestUserID, Ranking ranking) throws SessionErrorException {
         SessionID sessionID = guestUserID.getSessionID();
         RankingSession session = validateSession(sessionID.getSessionId());
@@ -39,7 +46,13 @@ public class SessionServiceGuest extends SessionService {
                     "Session with id " + guestUserID.getSessionID().getSessionId() + " is closed");
         }
 
-        GUEST_USER_RANKING.computeIfAbsent(sessionID.getSessionId(), s -> new ArrayList<>());
+        for (AgendaItem item : ranking.getItems()) {
+            if (!session.getAgendaItems().contains(item)) {
+                throw new SessionErrorException("Ranked on invalid agenda item");
+            }
+        }
+
+        GUEST_USER_RANKING.computeIfAbsent(sessionID.getSessionId(), _ -> new ArrayList<>());
         GUEST_USER_RANKING.get(sessionID.getSessionId()).add(new GuestUserInformation(guestUserID, sessionID, ranking));
     }
 }
