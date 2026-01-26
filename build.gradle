@@ -45,7 +45,7 @@ dependencies {
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
-    testImplementation 'org.assertj:assertj-core:3.26.3'
+    testImplementation 'org.assertj:assertj-core:3.27.7'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 }
